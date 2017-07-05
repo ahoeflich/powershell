@@ -6,22 +6,26 @@ $Phone = read-Host 'Cell or Extension Number:'
 $un = read-Host 'Username:'
 $pw = Read-Host -AsSecureString 'Secure Password:'
 $Name = $first + ' ' + $last
-$homedr = 'X:'
-$Homedir = '\server\userdirs\' + $un
+##$homedr = 'X:'
+##$Homedir = '\server\userdirs\' + $un
 
 connect-msolservice -credential $UserCredential
 
 Write-host "Setting Office 365 Account Password"
 
 if ($Description = "Tech")
+if ($Description -like "*Tech*")
 {
     Set-MsolUserLicense -UserPrincipalName "$un@cstonemechanical.com" -AddLicenses CapstoneMech:EXCHANGESTANDARD, CapstoneMech:0365_BUSINESS
 }
-New-MsolUser -DisplayName "$First $Last" -FirstName $First -LastName $Last -UserPrincipalName "$un@cstonemechanical.com" -PasswordNeverExpires $true -UsageLocation US -password $PlainPassword
+New-MsolUser -DisplayName "$First $Last" -FirstName $First -LastName $Last -UserPrincipalName "$un@cstonemechanical.com" -PasswordNeverExpires $true -UsageLocation US -password $pw
+Write-host "Creating Account Information..."
+Write-host "Assigning Licenses...."
+Write-host "Finalizing Account Setup....."
 Set-MsolUserLicense -UserPrincipalName "$un@cstonemechanical.com" -AddLicenses CapstoneMech:O365_BUSINESS, CapstoneMech:EXCHANGESTANDARD
 Set-MsolUser -UserPrincipalName "$un@cstonemechanical.com" -StrongPasswordRequired $True
 
-
+Write-Host "Username : $un' 'Password: $pw' 'Full Name: $Name'"
 
 ##$ol = New-Object -comObject Outlook.Application
 
